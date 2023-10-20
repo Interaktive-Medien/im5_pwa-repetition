@@ -1,0 +1,292 @@
+#--------------Manifest generiert von Github Copilot--------------
+
+{
+    "name": "My PWA",
+    "short_name": "My PWA",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "icons": [
+        {
+            "src": "/icons/icon-72x72.png",
+            "sizes": "72x72",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-96x96.png",
+            "sizes": "96x96",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-152x152.png",
+            "sizes": "152x152",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-384x384.png",
+            "sizes": "384x384",
+            "type": "image/png"
+        },
+        {
+            "src": "/icons/icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ]
+}
+
+
+--------------
+  
+
+
+
+
+
+#--------------Description--------------
+
+"description": "Das ist ein Übungsprojekt von IM 5. Es werden verschiedene Tiere angezeigt.",
+
+--------------
+  
+
+
+
+#--------------Screenshots--------------
+
+
+"screenshots": [
+    {
+      "src": "screenshots/screenshot1.png",
+      "sizes": "1280x800",
+      "type": "image/png"
+    },
+    {
+      "src": "screenshots/screenshot2.png",
+      "sizes": "750x1334",
+      "type": "image/png"
+    }
+  ],  
+
+--------------
+
+
+
+
+#--------------Shortcuts--------------
+
+"shortcuts": [
+    {
+      "name": "Startseite Tiere",
+      "url": "index.html",
+      "description": "Zeigt die Startseite Früchte",
+      "icons": [{ "src": "AppImages/icon-96x96.png", "sizes": "96x96" }]
+    }
+  ],
+
+
+--------------
+
+
+
+
+
+#--------------Serviceworker--------------
+
+
+// This is the "Offline page" service worker
+
+importScripts('https://storage.googleapis.com/workbox-cdn/releases/5.1.2/workbox-sw.js');
+
+const CACHE = "pwabuilder-page";
+
+// TODO: replace the following with the correct offline fallback page i.e.: const offlineFallbackPage = "offline.html";
+const offlineFallbackPage = "offline.html";
+
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
+
+self.addEventListener('install', async (event) => {
+  event.waitUntil(
+    caches.open(CACHE)
+      .then((cache) => cache.add(offlineFallbackPage))
+  );
+});
+
+if (workbox.navigationPreload.isSupported()) {
+  workbox.navigationPreload.enable();
+}
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.mode === 'navigate') {
+    event.respondWith((async () => {
+      try {
+        const preloadResp = await event.preloadResponse;
+
+        if (preloadResp) {
+          return preloadResp;
+        }
+
+        const networkResp = await fetch(event.request);
+        return networkResp;
+      } catch (error) {
+
+        const cache = await caches.open(CACHE);
+        const cachedResp = await cache.match(offlineFallbackPage);
+        return cachedResp;
+      }
+    })());
+  }
+});
+
+
+
+
+--------------
+
+
+
+
+
+#--------------Serviceworker registrieren--------------
+
+<!-- #2: Service-Worker registrieren -->
+<script>
+  if (typeof navigator.serviceWorker !== 'undefined') {
+    navigator.serviceWorker.register('serviceworker.js')
+  }
+</script>
+<!-- ENDE #2: Service-Worker registrieren -->
+
+
+
+
+
+--------------
+
+
+
+
+
+
+
+#--------------Offline.html--------------
+
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Offline</title>
+    <style>
+      html {
+        font-family: Helvetica, sans-serif;
+        text-align: center;
+        width: 100%;
+        background-color: #FA7964;
+      }
+
+      main {
+        max-width: 960px;
+        padding: 1rem;
+        margin: 0 auto;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Du bist offline.</h1>
+      <p>Stell sicher, dass du eine stabile Internetverbindung hast und versuche es bitte erneut.</p>
+    </main>
+  </body>
+</html>
+
+
+
+
+
+--------------
+
+
+
+#--------------Apple-Touch-Icons--------------
+
+<!-- #4: Apple-Touch-Icons für iOS-->
+    <link rel="apple-touch-icon" sizes="72x72" href="AppImages/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="AppImages/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="AppImages/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="AppImages/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="AppImages/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="AppImages/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="AppImages/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="AppImages/icon-512x512.png">
+<!-- Ende #4: Apple-Touch-Icons für iOS-->
+
+
+
+
+
+--------------
+
+#--------------Script Install-Button--------------
+
+
+<!-- Start #6: Script für Install-Button--> <!-- Code von https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen -->
+<script>
+let deferredPrompt;
+const addBtn = document.querySelector("#pwa-install-button");
+addBtn.style.display = "none";
+
+window.addEventListener("beforeinstallprompt", (e) => {
+  // Prevent Chrome 67 and earlier from automatically showing the prompt
+  e.preventDefault();
+  // Stash the event so it can be triggered later.
+  deferredPrompt = e;
+  // Update UI to notify the user they can add to home screen
+  addBtn.style.display = "block";
+
+  addBtn.addEventListener("click", (e) => {
+    // hide our user interface that shows our A2HS button
+    addBtn.style.display = "none";
+    // Show the prompt
+    deferredPrompt.prompt();
+    // Wait for the user to respond to the prompt
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === "accepted") {
+        console.log("User accepted the A2HS prompt");
+      } else {
+        console.log("User dismissed the A2HS prompt");
+      }
+      deferredPrompt = null;
+    });
+  });
+});
+</script>
+<!-- Ende #6: Script für Install-Button-->
+
+
+
+--------------
+
+
+
+

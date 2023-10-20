@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="de" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tiere</title>
+    <link href="css/styles.css" rel="stylesheet" type="text/css">
+
+    <!-- #1: Manifest. Dieses muss im Root liegen -->
+    <link rel="manifest" href="manifest.json">
+    <!-- Ende #1: Manifest -->
+
+    <!-- #3: Hintergrundfarbe für iOS -->
+    <meta name="theme-color" content="#92d3f5">
+    <!-- Ende #3: Hintergrundfarbe für iOS -->
+
+    <!-- #4: Apple-Touch-Icons für iOS-->
+    <link rel="apple-touch-icon" sizes="72x72" href="AppImages/icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="AppImages/icon-96x96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="AppImages/icon-128x128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="AppImages/icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="AppImages/icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="AppImages/icon-192x192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="AppImages/icon-384x384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="AppImages/icon-512x512.png">
+    <!-- Ende #4: Apple-Touch-Icons für iOS-->
+  </head>
+
+  <body>
+    <main>
+      <!-- #5: Platzhalter für Install-Button -->
+      <button type="button" id="pwa-install-button">PWA installieren</button>
+      <!-- Ende #5: Platzhalter für Install-Button -->
+
+      <h1>Tiere</h1>
+      <div id="tiereContainer">
+        <article>
+            <img src="img/baer.png" alt="Bär">
+            <h2>Bär</h2>
+        </article>
+        <article>
+            <img src="img/frosch.png" alt="Frosch">
+            <h2>Frosch</h2>
+        </article>
+        <article>
+            <img src="img/fuchs.png" alt="Fuchs">
+            <h2>Fuchs</h2>
+        </article>
+        <article>
+            <img src="img/hahn.png" alt="Hahn">
+            <h2>Hahn</h2>
+        </article>
+        <article>
+            <img src="img/hamster.png" alt="Hamster">
+            <h2>hamster</h2>
+        </article>
+        <article>
+            <img src="img/hase.png" alt="Hase">
+            <h2>Hase</h2>
+        </article>
+        <article>
+            <img src="img/hund.png" alt="Hund">
+            <h2>Hund</h2>
+        </article>
+        <article>
+            <img src="img/kuh.png" alt="Kuh">
+            <h2>Kuh</h2>
+        </article>
+        <article>
+            <img src="img/maus.png" alt="Maus">
+            <h2>Maus</h2>
+        </article>
+        <article>
+            <img src="img/panda.png" alt="Panda">
+            <h2>Panda</h2>
+        </article>
+        <article>
+            <img src="img/schwein.png" alt="Schwein">
+            <h2>Schwein</h2>
+        </article>
+        <article>
+            <img src="img/tiger.png" alt="Tiger">
+            <h2>Tiger</h2>
+        </article>
+      </div>
+    </main>
+
+    <!-- Start #6: Script für Install-Button--> <!-- Code von https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps/Add_to_home_screen -->
+    <script>
+    let deferredPrompt;
+    const addBtn = document.querySelector("#pwa-install-button");
+    addBtn.style.display = "none";
+
+    window.addEventListener("beforeinstallprompt", (e) => {
+      // Prevent Chrome 67 and earlier from automatically showing the prompt
+      e.preventDefault();
+      // Stash the event so it can be triggered later.
+      deferredPrompt = e;
+      // Update UI to notify the user they can add to home screen
+      addBtn.style.display = "block";
+
+      addBtn.addEventListener("click", (e) => {
+        // hide our user interface that shows our A2HS button
+        addBtn.style.display = "none";
+        // Show the prompt
+        deferredPrompt.prompt();
+        // Wait for the user to respond to the prompt
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === "accepted") {
+            console.log("User accepted the A2HS prompt");
+          } else {
+            console.log("User dismissed the A2HS prompt");
+          }
+          deferredPrompt = null;
+        });
+      });
+    });
+    </script>
+    <!-- Ende #6: Script für Install-Button-->
+
+    <!-- #2: Service-Worker registrieren -->
+    <script>
+      if (typeof navigator.serviceWorker !== 'undefined') {
+        navigator.serviceWorker.register('serviceworker.js')
+      }
+    </script>
+    <!-- ENDE #2: Service-Worker registrieren -->
+
+  </body>
+</html>
